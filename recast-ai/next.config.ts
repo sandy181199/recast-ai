@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  transpilePackages: ["three", "@react-three/fiber", "@react-three/drei"],
+  experimental: {
+    optimizePackageImports: ["@react-three/fiber", "@react-three/drei", "framer-motion"],
+  },
 };
 
 export default nextConfig;
