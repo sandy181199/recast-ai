@@ -8,19 +8,11 @@ export default function Preloader() {
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
-    if (sessionStorage.getItem('recast-loaded')) {
-      setVisible(false)
-      return
-    }
-
     const interval = setInterval(() => {
       setCount((prev) => {
         if (prev >= 100) {
           clearInterval(interval)
-          setTimeout(() => {
-            setVisible(false)
-            sessionStorage.setItem('recast-loaded', '1')
-          }, 380)
+          setTimeout(() => setVisible(false), 380)
           return 100
         }
         return Math.min(prev + Math.floor(Math.random() * 5) + 1, 100)
