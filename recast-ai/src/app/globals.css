@@ -1,117 +1,88 @@
 @import "tailwindcss";
 
+/* ─── Design tokens ──────────────────────────────────── */
 :root {
-  --background: #020208;
-  --foreground: #f0f0ff;
-
-  /* Brand palette */
-  --brand-purple: #7c3aed;
-  --brand-violet: #a855f7;
-  --brand-pink: #ec4899;
-  --brand-cyan: #06b6d4;
-
-  /* Glass */
-  --glass-bg: rgba(255, 255, 255, 0.04);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-blur: 24px;
+  --background:   #EDEEE8;
+  --foreground:   #1A1A1A;
+  --muted:        #6B6B6B;
+  --border:       #D4D4CC;
+  --surface:      #E5E6DF;
+  --surface-alt:  #F0F1EB;
+  --dark-bg:      #1A1A1A;
+  --dark-text:    #F0F0EB;
+  --navbar-h:     64px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-brand-purple: var(--brand-purple);
-  --color-brand-violet: var(--brand-violet);
-  --color-brand-pink: var(--brand-pink);
-  --color-brand-cyan: var(--brand-cyan);
+  --color-background:  var(--background);
+  --color-foreground:  var(--foreground);
+  --color-muted:       var(--muted);
+  --color-border:      var(--border);
+  --color-surface:     var(--surface);
+  --color-dark-bg:     var(--dark-bg);
+  --font-sans:         var(--font-sans);
+  --font-display:      var(--font-display);
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* ─── Base layer ─────────────────────────────────────────
+   Inside @layer base so Tailwind utilities can override.
+──────────────────────────────────────────────────────── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans, "Inter", system-ui, sans-serif);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* Lenis smooth scroll hooks */
+  html.lenis,
+  html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: hidden; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar       { width: 2px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+  /* Selection */
+  ::selection { background: rgba(26, 26, 26, 0.12); color: var(--foreground); }
 }
 
-html {
-  scroll-behavior: smooth;
+/* ─── Utilities (outside @layer so they beat Tailwind layers) ── */
+
+.site-container {
+  width: 100%;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left:  clamp(1.5rem, 5vw, 5rem);
+  padding-right: clamp(1.5rem, 5vw, 5rem);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans, "Inter", system-ui, sans-serif);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+/* Marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 
-/* Lenis smooth scroll */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--brand-purple);
-  border-radius: 99px;
-}
-
-/* Selection */
-::selection {
-  background: rgba(124, 58, 237, 0.4);
-  color: #fff;
-}
-
-/* Glass morphism utility */
-.glass {
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
-}
-
-/* Gradient text utility */
-.gradient-text {
-  background: linear-gradient(135deg, var(--brand-violet), var(--brand-pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.gradient-text-cyan {
-  background: linear-gradient(135deg, var(--brand-cyan), var(--brand-violet));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Noise texture overlay (subtle grain for depth) */
-.noise::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.4;
+.marquee-track {
+  animation: marquee 40s linear infinite;
+  will-change: transform;
 }
