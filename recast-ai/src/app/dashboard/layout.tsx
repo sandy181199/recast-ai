@@ -1,7 +1,8 @@
 import { UserButton } from '@clerk/nextjs'
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { getUserByClerkId, createUser } from '@/lib/db'
 
 const navLinks = [
   {
@@ -46,6 +47,14 @@ const navLinks = [
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { userId } = await auth()
   if (!userId) redirect('/auth/sign-in')
+
+  // Lazy upsert: create DB user on first dashboard visit (covers local dev where webhooks can't reach localhost)
+  const existing = await getUserByClerkId(userId)
+  if (!existing) {
+    const clerkUser = await currentUser()
+    const email = clerkUser?.emailAddresses[0]?.emailAddress ?? ''
+    await createUser(userId, email)
+  }
 
   return (
     <div className="min-h-screen bg-[#EDEEE8] flex">
