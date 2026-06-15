@@ -38,10 +38,10 @@ export default function Hero() {
               custom={0.1}
               className="font-display text-[clamp(2.8rem,5.5vw,5rem)] font-bold leading-[1.05] tracking-tight text-[#1A1A1A] mb-7"
             >
-              Turn Any Content
+              Your best ideas
               <br />
-              Into{' '}
-              <span className="border-b-[3px] border-[#1A1A1A]">Every Format</span>
+              deserve{' '}
+              <span className="border-b-[3px] border-[#1A1A1A]">every platform.</span>
             </motion.h1>
 
             <motion.p

@@ -15,7 +15,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "RecastAI — Turn Any Content Into Every Format",
+  title: "RecastAI — Your Best Ideas Deserve Every Platform",
   description:
     "Paste a blog post, YouTube link, or podcast transcript. Get LinkedIn posts, Twitter threads, newsletters, and more — instantly, powered by AI.",
   keywords: ["AI content repurposing", "content marketing", "LinkedIn posts", "Twitter threads"],
